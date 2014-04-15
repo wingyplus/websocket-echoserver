@@ -3,13 +3,13 @@ package main
 import (
 	"code.google.com/p/go.net/websocket"
 	"fmt"
-	"net/http"
 	"io"
+	"net/http"
 )
 
 type Server struct {
 	Clients map[*websocket.Conn]string
-	Room map[string][]*websocket.Conn
+	Room    map[string][]*websocket.Conn
 }
 
 func (s *Server) Add(roomName string, c *websocket.Conn) {
@@ -24,7 +24,7 @@ func (s *Server) Remove(ws *websocket.Conn) {
 	clients := s.Room[roomName]
 	for i, c := range clients {
 		if ws == c {
-			s.Room[roomName] = append(s.Room[roomName][:i], s.Room[roomName][i + 1:]...)
+			s.Room[roomName] = append(s.Room[roomName][:i], s.Room[roomName][i+1:]...)
 		}
 	}
 	if len(s.Room[roomName]) == 0 {
@@ -34,7 +34,7 @@ func (s *Server) Remove(ws *websocket.Conn) {
 
 var server = &Server{
 	Clients: make(map[*websocket.Conn]string),
-	Room: make(map[string][]*websocket.Conn),
+	Room:    make(map[string][]*websocket.Conn),
 }
 
 func EchoServer(ws *websocket.Conn) {
@@ -63,10 +63,10 @@ func EchoServer(ws *websocket.Conn) {
 }
 
 func main() {
+	http.Handle("/", http.FileServer(http.Dir("www")))
 	http.Handle("/echo", websocket.Handler(EchoServer))
 	err := http.ListenAndServe(":12345", nil)
 	if err != nil {
 		panic("ListenAndServe: " + err.Error())
 	}
-
 }
