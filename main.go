@@ -40,6 +40,8 @@ var server = &Server{
 func EchoServer(ws *websocket.Conn) {
 	var req map[string]string
 
+    defer server.Remove(ws)
+
 	for websocket.JSON.Receive(ws, &req) != io.EOF {
 		fmt.Println(ws.Request().RemoteAddr)
 		switch req["event"] {
@@ -57,7 +59,6 @@ func EchoServer(ws *websocket.Conn) {
 	}
 
 	fmt.Println("connection ", ws)
-	server.Remove(ws)
 	fmt.Println(server.Clients)
 	fmt.Println(server.Room)
 }
