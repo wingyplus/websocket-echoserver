@@ -19,7 +19,7 @@ func TestEchoServer(t *testing.T) {
 
 	conn, err := websocket.Dial(
 		fmt.Sprintf("ws://%s/echo", serverAddr),
-		"tcp",
+		"",
 		fmt.Sprintf("http://%s", serverAddr))
 	defer conn.Close()
 
