@@ -5,7 +5,6 @@ import (
 	"code.google.com/p/go.net/websocket"
 	"fmt"
 	"github.com/wingyplus/websocket/server"
-	_ "net"
 	"net/http"
 	"net/http/httptest"
 	"testing"
