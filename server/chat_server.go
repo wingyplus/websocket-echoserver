@@ -44,6 +44,11 @@ func (chatServer *ChatServer) FindClientFromRoom(connection *websocket.Conn, roo
     return nil, -1
 }
 
+func (chatServer *ChatServer) RemoveClientFromRoom(connection *websocket.Conn, roomName string) {
+    _, i := chatServer.FindClientFromRoom(connection, roomName)
+    chatServer.Room[roomName] = append(chatServer.Room[roomName][:i], chatServer.Room[roomName][i+1:]...)
+}
+
 func (chatServer *ChatServer) DeleteRoom(roomName string) {
     delete(chatServer.Room, roomName)
 }

@@ -109,3 +109,33 @@ func TestFindClient(t *testing.T) {
         t.Errorf("expect -1 but was %d", index)
     }
 }
+
+func TestRemoveClientFromRoom(t *testing.T) {
+    connections := []*websocket.Conn{}
+
+    for i := 1; i <= 10; i++ {
+        connections = append(connections, new(websocket.Conn))
+    }
+
+    chatServer := server.NewChatServer()
+    chatServer.CreateRoom("Hello", server.NewClient(connections[0]))
+
+    for i := 1; i < 10; i++ {
+        chatServer.AddClient(server.NewClient(connections[i]), "Hello")
+    }
+
+    chatServer.RemoveClientFromRoom(connections[4], "Hello")
+
+    if len(chatServer.Room["Hello"]) != 9 {
+        t.Errorf("expect 9 but was %d", len(chatServer.Room["Hello"]))
+    }
+
+    c, i := chatServer.FindClientFromRoom(connections[4], "Hello")
+
+    if c != nil {
+        t.Errorf("expect nil but was %v", c)
+    }
+    if i != -1 {
+        t.Errorf("expect -1 but was %d", i)
+    }
+}
